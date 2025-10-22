@@ -1,0 +1,14 @@
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\bin\Debug\net8.0\RepasoConLINQ.exe
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\bin\Debug\net8.0\RepasoConLINQ.deps.json
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\bin\Debug\net8.0\RepasoConLINQ.runtimeconfig.json
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\bin\Debug\net8.0\RepasoConLINQ.dll
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\bin\Debug\net8.0\RepasoConLINQ.pdb
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.AssemblyInfoInputs.cache
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.AssemblyInfo.cs
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.csproj.CoreCompileInputs.cache
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.dll
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\refint\RepasoConLINQ.dll
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.pdb
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\RepasoConLINQ.genruntimeconfig.cache
+C:\Users\CAMPUSFP\source\repos\RepasoConLINQ\obj\Debug\net8.0\ref\RepasoConLINQ.dll
