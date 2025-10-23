@@ -8,6 +8,10 @@
         Ejercicio4();
         Ejercicio5();
         Ejercicio6();
+        Ejercicio7();
+        Ejercicio8();
+        Ejercicio9();
+        Ejercicio10();
     }
     public static void Ejercicio1(string[] args)
     {
@@ -124,6 +128,8 @@
 
     static void Ejercicio4()
     {
+        Console.WriteLine("\nEjercicio 4:");
+
         var productos = new List<Producto>
     {
         new Producto { Nombre = "Laptop", Categoria = "Electrónicos", Precio = 800 },
@@ -183,6 +189,8 @@
 
     static void Ejercicio5()
     {
+        Console.WriteLine("\nEjercicio 5:");
+
         var clientes = new List<Cliente>
     {
         new Cliente { Id = 1, Nombre = "Carlos" },
@@ -228,6 +236,8 @@
 
     static void Ejercicio6()
     {
+        Console.WriteLine("\nEjercicio 6:");
+
         var numeros = new List<int> { 10, 20, 30, 40, 50 };
 
         // 1. Encuentra el primer número mayor a 25
@@ -255,6 +265,227 @@
         {
             Console.WriteLine("Error: 'Single' lanzó una excepción porque no encontró el elemento.");
         }
+    }
+
+    class Producto1
+    {
+        public string Nombre { get; set; }
+        public double Precio { get; set; }
+    }
+
+    static void Ejercicio7()
+    {
+        Console.WriteLine("\nEjercicio 7:");
+
+        Console.WriteLine(" == Nivel Avanzado == ");
+
+        var productos = new List<Producto1>();
+        for (int i = 1; i <= 20; i++)
+            productos.Add(new Producto1 { Nombre = $"Producto {i}", Precio = i * 10 });
+        var productosQuery = (from p in productos select p).ToList();
+
+        // 1. Página 1 con 5 productos
+        var pagina1 = productos.Skip(0).Take(5);
+        var pagina1Query = (from p in productos select p).Skip(0).Take(5);
+
+        Console.WriteLine("Página 1 (productos 1-5):");
+        foreach (var p in pagina1)
+            Console.WriteLine($"{p.Nombre} - ${p.Precio}");
+
+        // 2. Página 2 con 5 productos
+        var pagina2 = productos.Skip(5).Take(5);
+        var pagina2Query = (from p in productos select p).Skip(5).Take(5);
+
+        Console.WriteLine("\nPágina 2 (productos 6-10):");
+        foreach (var p in pagina2)
+            Console.WriteLine($"{p.Nombre} - ${p.Precio}");
+
+        // 3. Método genérico que recibe número de página y tamaño
+        IEnumerable<Producto1> Paginacion(List<Producto1> lista, int numeroPagina, int tamPagina)
+        {
+            return lista.Skip((numeroPagina - 1) * tamPagina).Take(tamPagina);
+        }
+
+        Console.WriteLine("\nPágina 3 (productos 11-15) usando método:");
+        var pagina3 = Paginacion(productos, 3, 5);
+        foreach (var p in pagina3)
+            Console.WriteLine($"{p.Nombre} - ${p.Precio}");
+    }
+
+    class Venta1
+    {
+        public string Producto { get; set; }
+        public string Vendedor { get; set; }
+        public int Cantidad { get; set; }
+        public double Precio { get; set; }
+    }
+
+    static void Ejercicio8()
+    {
+        Console.WriteLine("\nEjercicio 8:");
+
+        var ventas = new List<Venta1>
+    {
+        new Venta1 { Producto = "Laptop", Vendedor = "Ana", Cantidad = 2, Precio = 800 },
+        new Venta1 { Producto = "Mouse", Vendedor = "Ana", Cantidad = 5, Precio = 25 },
+        new Venta1 { Producto = "Laptop", Vendedor = "Luis", Cantidad = 1, Precio = 800 },
+        new Venta1 { Producto = "Teclado", Vendedor = "Luis", Cantidad = 3, Precio = 50 }
+    };
+
+        // 1. Total vendido por cada vendedor
+        var totalPorVendedor = ventas
+            .GroupBy(v => v.Vendedor)
+            .Select(g => new { Vendedor = g.Key, Total = g.Sum(v => v.Cantidad * v.Precio) });
+        var totalPorVendedorQuery = from v in ventas
+                                   group v by v.Vendedor into g
+                                   select new { Vendedor = g.Key, Total = g.Sum(v => v.Cantidad * v.Precio) };
+
+        Console.WriteLine("Total vendido por cada vendedor:");
+        foreach (var v in totalPorVendedor)
+            Console.WriteLine($"{v.Vendedor}: ${v.Total}");
+
+        // 2. Producto más vendido (por cantidad)
+        var masVendido = ventas
+            .GroupBy(v => v.Producto)
+            .Select(g => new { Producto = g.Key, TotalCantidad = g.Sum(v => v.Cantidad) })
+            .OrderByDescending(x => x.TotalCantidad)
+            .First();
+
+        Console.WriteLine($"\nProducto más vendido: {masVendido.Producto} ({masVendido.TotalCantidad} unidades)");
+
+        // 3. Valor total de todas las ventas
+        var totalVentas = ventas.Sum(v => v.Cantidad * v.Precio);
+        var totalVentasQuery = (from v in ventas select v.Cantidad * v.Precio).Sum();
+        Console.WriteLine($"\nValor total de todas las ventas: ${totalVentas}");
+
+        // 4. Agrupa por producto y calcula cantidad total vendida
+        var totalPorProducto = ventas
+            .GroupBy(v => v.Producto)
+            .Select(g => new { Producto = g.Key, CantidadTotal = g.Sum(v => v.Cantidad) });
+        var totalPorProductoQuery = from v in ventas
+                                 group v by v.Producto into g
+                                 select new { Producto = g.Key, CantidadTotal = g.Sum(v => v.Cantidad) };
+
+        Console.WriteLine("\nCantidad total vendida por producto:");
+        foreach (var item in totalPorProducto)
+            Console.WriteLine($"{item.Producto}: {item.CantidadTotal} unidades");
+    }
+
+    class Empleado1
+    {
+        public string Nombre { get; set; }
+        public double Salario { get; set; }
+    }
+
+    class Departamento1
+    {
+        public string Nombre { get; set; }
+        public List<Empleado1> Empleados { get; set; }
+    }
+
+    static void Ejercicio9()
+    {
+        Console.WriteLine("\nEjercicio 9:");
+
+        var departamentos = new List<Departamento1>
+    {
+        new Departamento1
+        {
+            Nombre = "Ventas",
+            Empleados = new List<Empleado1>
+            {
+                new Empleado1 { Nombre = "Ana", Salario = 3000 },
+                new Empleado1 { Nombre = "Luis", Salario = 3500 }
+            }
+        },
+        new Departamento1
+        {
+            Nombre = "IT",
+            Empleados = new List<Empleado1>
+            {
+                new Empleado1 { Nombre = "Carlos", Salario = 4000 },
+                new Empleado1 { Nombre = "María", Salario = 4200 }
+            }
+        }
+    };
+
+        // 1. Departamento con el salario promedio más alto
+        var deptoMayorSalario = departamentos
+            .Select(d => new { d.Nombre, Promedio = d.Empleados.Average(e => e.Salario) })
+            .OrderByDescending(x => x.Promedio)
+            .First();
+        var deptoMayorSalarioQuery = (from d in departamentos
+                                     select new { d.Nombre, Promedio = d.Empleados.Average(e => e.Salario) } into deptoProm
+                                     orderby deptoProm.Promedio descending
+                                     select deptoProm).First();
+
+        Console.WriteLine($"Departamento con mayor salario promedio: {deptoMayorSalario.Nombre} (${deptoMayorSalario.Promedio:F2})");
+
+        // 2. Lista todos los empleados con su departamento
+        Console.WriteLine("\nEmpleados con su departamento:");
+        var empleadosConDepto = departamentos
+            .SelectMany(d => d.Empleados.Select(e => new { Empleado = e.Nombre, Departamento = d.Nombre }));
+
+        foreach (var e in empleadosConDepto)
+            Console.WriteLine($"{e.Empleado} - {e.Departamento}");
+
+        // 3. Empleados que ganan más de 3500
+        Console.WriteLine("\nEmpleados que ganan más de 3500:");
+        var empleadosAltos = departamentos
+            .SelectMany(d => d.Empleados.Where(e => e.Salario > 3500)
+            .Select(e => new { e.Nombre, e.Salario, Departamento = d.Nombre }));
+        var empleadosAltosQuery = from d in departamentos
+                                 from e in d.Empleados
+                                 where e.Salario > 3500
+                                 select new { e.Nombre, e.Salario, Departamento = d.Nombre };
+
+        foreach (var e in empleadosAltos)
+            Console.WriteLine($"{e.Nombre} - {e.Departamento} (${e.Salario})");
+    }
+
+    class Estudiante1
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+        public string Curso { get; set; }
+    }
+
+    static void Ejercicio10()
+    {
+        Console.WriteLine("\nEjercicio 10:");
+
+        var estudiantes = new List<Estudiante1>
+    {
+        new Estudiante1 { Id = 1, Nombre = "Ana", Curso = "Matemáticas" },
+        new Estudiante1 { Id = 2, Nombre = "Luis", Curso = "Matemáticas" },
+        new Estudiante1 { Id = 3, Nombre = "Carlos", Curso = "Historia" }
+    };
+
+        // 1. Convertir a Dictionary<int, Estudiante1> usando Id como clave
+        var diccionario = estudiantes.ToDictionary(e => e.Id);
+        var diccionarioQuery = (from e in estudiantes
+                               select e).ToDictionary(e => e.Id);
+        Console.WriteLine("Diccionario de estudiantes:");
+        foreach (var kvp in diccionario)
+            Console.WriteLine($"Id: {kvp.Key}, Nombre: {kvp.Value.Nombre}");
+
+        // 2. Crear un Lookup por curso
+        var lookup = estudiantes.ToLookup(e => e.Curso);
+        Console.WriteLine("\nEstudiantes agrupados por curso:");
+        foreach (var grupo in lookup)
+        {
+            Console.WriteLine($"\nCurso: {grupo.Key}");
+            foreach (var e in grupo)
+                Console.WriteLine($" - {e.Nombre}");
+        }
+
+        // 3. Convertir a array y luego de vuelta a lista
+        var array = estudiantes.ToArray();
+        var listaNueva = array.ToList();
+
+        Console.WriteLine("\nConversión a array y luego a lista:");
+        foreach (var e in listaNueva)
+            Console.WriteLine($"{e.Nombre} ({e.Curso})");
     }
 
 
