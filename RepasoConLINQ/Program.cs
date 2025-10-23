@@ -5,6 +5,9 @@
         Ejercicio1(args);
         Ejercicio2(args);
         Ejercicio3();
+        Ejercicio4();
+        Ejercicio5();
+        Ejercicio6();
     }
     public static void Ejercicio1(string[] args)
     {
@@ -112,10 +115,147 @@
         foreach (var p in edadDescNombreAsc)
             Console.WriteLine($"{p.Nombre}, {p.Edad}");
     }
-    public static void Ejercicio4(string[] args)
+    class Producto
     {
-        Console.WriteLine("\n === Nivel Intermedio === ");
-        Console.WriteLine("\nEjercicio 4: ");
-
+        public string Nombre { get; set; }
+        public string Categoria { get; set; }
+        public double Precio { get; set; }
     }
+
+    static void Ejercicio4()
+    {
+        var productos = new List<Producto>
+    {
+        new Producto { Nombre = "Laptop", Categoria = "Electrónicos", Precio = 800 },
+        new Producto { Nombre = "Mouse", Categoria = "Electrónicos", Precio = 25 },
+        new Producto { Nombre = "Silla", Categoria = "Muebles", Precio = 150 },
+        new Producto { Nombre = "Mesa", Categoria = "Muebles", Precio = 300 }
+    };
+
+        // 1. Agrupa los productos por categoría
+        var grupos = productos.GroupBy(p => p.Categoria);
+        var gruposQuery = from p in productos group p by p.Categoria;
+
+        Console.WriteLine("Productos agrupados por categoría:");
+        foreach (var grupo in grupos)
+        {
+            Console.WriteLine($"\nCategoría: {grupo.Key}");
+            foreach (var p in grupo)
+                Console.WriteLine($" - {p.Nombre} (${p.Precio})");
+        }
+
+        // 2. Para cada categoría, calcula el precio promedio
+        var promedios = productos
+            .GroupBy(p => p.Categoria)
+            .Select(g => new { Categoria = g.Key, Promedio = g.Average(p => p.Precio) });
+        var promediosQuery = from p in productos
+                            group p by p.Categoria into g
+                            select new { Categoria = g.Key, Promedio = g.Average(p => p.Precio) };
+
+        Console.WriteLine("\nPrecio promedio por categoría:");
+        foreach (var item in promedios)
+            Console.WriteLine($"{item.Categoria}: ${item.Promedio:F2}");
+
+        // 3. Encuentra la categoría con el producto más caro
+        var categoriaMasCaro = productos
+            .OrderByDescending(p => p.Precio)
+            .First()
+            .Categoria;
+        var categoriaMasCaroQuery = (from p in productos
+                                     orderby p.Precio descending
+                                     select p).First().Categoria;
+
+        Console.WriteLine($"\nCategoría con el producto más caro: {categoriaMasCaro}");
+    }
+
+    class Cliente
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+    }
+
+    class Pedido
+    {
+        public int Id { get; set; }
+        public int ClienteId { get; set; }
+        public double Total { get; set; }
+    }
+
+    static void Ejercicio5()
+    {
+        var clientes = new List<Cliente>
+    {
+        new Cliente { Id = 1, Nombre = "Carlos" },
+        new Cliente { Id = 2, Nombre = "Elena" }
+    };
+
+        var pedidos = new List<Pedido>
+    {
+        new Pedido { Id = 1, ClienteId = 1, Total = 100 },
+        new Pedido { Id = 2, ClienteId = 1, Total = 200 },
+        new Pedido { Id = 3, ClienteId = 2, Total = 150 }
+    };
+
+        // 1. Une clientes con pedidos para mostrar nombre del cliente y total del pedido
+        var union = from c in clientes
+                    join p in pedidos on c.Id equals p.ClienteId
+                    select new { c.Nombre, p.Total };
+
+        Console.WriteLine("Clientes con sus pedidos:");
+        foreach (var item in union)
+            Console.WriteLine($"{item.Nombre} - Total del pedido: ${item.Total}");
+
+        // 2. Calcula el total de pedidos por cliente
+        var totalPorCliente = from c in clientes
+                              join p in pedidos on c.Id equals p.ClienteId
+                              group p by c.Nombre into grupo
+                              select new { Cliente = grupo.Key, Total = grupo.Sum(x => x.Total) };
+
+        Console.WriteLine("\nTotal de pedidos por cliente:");
+        foreach (var item in totalPorCliente)
+            Console.WriteLine($"{item.Cliente}: ${item.Total}");
+        
+
+        // 3. Encuentra clientes que no han realizado pedidos
+        var sinPedidos = from c in clientes
+                         where !(from p in pedidos select p.ClienteId).Contains(c.Id)
+                         select c.Nombre;
+
+        Console.WriteLine("\nClientes sin pedidos:");
+        foreach (var c in sinPedidos)
+            Console.WriteLine(c);
+    }
+
+    static void Ejercicio6()
+    {
+        var numeros = new List<int> { 10, 20, 30, 40, 50 };
+
+        // 1. Encuentra el primer número mayor a 25
+        var primeroMayor25 = numeros.First(n => n > 25);
+        var promeroMayor25Query = (from n in numeros where n > 25 select n).First();
+        Console.WriteLine($"Primer número mayor a 25: {primeroMayor25}");
+
+        // 2. Encuentra el último número menor a 35
+        var ultimoMenor35 = numeros.Last(n => n < 35);
+        var ultimoMenor35Query = (from n in numeros where n < 35 select n).Last();
+        Console.WriteLine($"Último número menor a 35: {ultimoMenor35}");
+
+        // 3. Usa SingleOrDefault para encontrar el número 30
+        var numero30 = numeros.SingleOrDefault(n => n == 30);
+        var numero30Query = (from n in numeros where n == 30 select n).SingleOrDefault();
+        Console.WriteLine($"Número encontrado con SingleOrDefault: {numero30}");
+
+        // 4. ¿Qué pasa si usas Single con un número que no existe?
+        try
+        {
+            var noExiste = numeros.Single(n => n == 99);
+            Console.WriteLine(noExiste);
+        }
+        catch (InvalidOperationException)
+        {
+            Console.WriteLine("Error: 'Single' lanzó una excepción porque no encontró el elemento.");
+        }
+    }
+
+
 }
